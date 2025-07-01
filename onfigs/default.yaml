@@ -1,0 +1,53 @@
+#===Data===
+raw_zip: "data/raw/PRSA2017_Data_20130301-20170228.zip"
+processed_csv: "data/processed/clean.csv"
+station: "Aotizhongxin"
+
+#===Dataloader===
+batch_size: 32
+val_split: 0.1
+test_split: 0.1
+random_seed: 123
+
+#===Model===
+hidden_size: [64,32]
+dropout: 0.0
+
+#===Training===
+epochs: 50
+optimizer: "Adam"
+learning_rate: 0.001
+weight_decay: 0.0001
+early_stopping_patience: 5
+
+scheduler:
+  name: "RecudeLROnPlateau"
+  factor: 0.5
+  patience: 3
+  min_lr: 1e-6
+
+#===Artifacts===
+model_dir: "models/"
+scaler_dir: "models/"
+log_dir: "logs/"
+tensorboard_log_dir: "logs/plots"
+reports_dir: "reports/"
+
+checkpoint:
+  save_best_only: true
+  save_everyn_epochs: 5
+
+#===Hyperparameter Search===
+hyperparameter_search: 
+  enabled: true
+  strategy: "grid"
+  metric: "val_loss" #which metric to optimize
+  param_grid:
+    - [64, 32]
+    - [128, 64]
+    - [64, 32, 16]
+  dropout: [0.0, 0.2, 0.5]
+  learning_rate: [0.001, 0.0005, 0.0001]
+  batch_size: [32, 64, 128]
+  weight_decay: [0.0, 0.0001]
+early_stopping_patience: 3
