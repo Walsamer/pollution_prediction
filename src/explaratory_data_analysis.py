@@ -17,13 +17,14 @@ def plot_pm25_trend(df: pd.DataFrame, output_dir: str) -> str:
     os.makedirs(output_dir, exist_ok=True)
 
     # Calculate daily average (datetime index was set in preprocessing)
-    daily_avg = df['pm2.5'].resample('D').mean()
+    df = df.copy()
+    daily_avg = df['PM2.5'].resample('D').mean()
 
     fig, ax = plt.subplots()
     ax.plot(daily_avg.index, daily_avg.values)
     ax.set_xlabel('Date')
-    ax.set_ylabel('Daily Average PM2.5')
-    ax.set_title('Daily Average PM2.5 Trend')
+    ax.set_ylabel('PM2.5')
+    ax.set_title('PM2.5 Trend')
 
     out_path = os.path.join(output_dir, 'eda_pm25_trend.pdf')
     fig.savefig(out_path)
@@ -40,27 +41,48 @@ def plot_correlation(df: pd.DataFrame, output_dir: str) -> str:
     """
     os.makedirs(output_dir, exist_ok=True)
 
-    # Compute correlation matrix
-    corr = df.corr()
+    if 'datetime' in df.columns:
+        df = df.copy()
+        df['datetime'] = pd.to_datetime(df['datetime'], infer_datetime_format=True)
+        df = df.set_index('datetime')
 
-    # Plot heatmap
-    fig, ax = plt.subplots()
-    cax = ax.matshow(corr, vmin=-1, vmax=1)
-    fig.colorbar(cax)
+    df_num = df.select_dtypes(include=[np.number]) #only numerical cols
+    if df_num.shape[1] < 2:
+        logger.warning("Not enough numeric columns for annotated heatmap; found %d", df_num.shape[1])
+        return ""
 
-    ticks = np.arange(len(corr.columns))
-    ax.set_xticks(ticks)
-    ax.set_yticks(ticks)
-    ax.set_xticklabels(corr.columns, rotation=90)
-    ax.set_yticklabels(corr.columns)
+    corr = df_num.corr() #computing correlation matrix
+
+    fig, ax = plt.subplots(figsize=(10, 8))
+    im = ax.imshow(corr, cmap='seismic', vmin=-1, vmax=1)
+    fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    cols = list(corr.columns)
+    ax.set_xticks(range(len(cols)))
+    ax.set_xticklabels(cols, rotation=90)
+    ax.set_yticks(range(len(cols)))
+    ax.set_yticklabels(cols, rotation=0)
+
+    #annotation of cells
+    n = len(cols)
+    for i in range(n):
+        for j in range(n):
+            v = corr.iat[i, j]
+            s = f"{v:.2f}".rstrip('0').rstrip('.')
+            ax.text(
+                j, i, s,
+                ha='center', va='center',
+                fontsize=6,
+                color='white' if abs(v) > 0.6 else 'black'
+            )
+
     ax.set_title('Feature Correlation Heatmap')
+    fig.tight_layout()
 
     out_path = os.path.join(output_dir, 'eda_correlation_heatmap.pdf')
     fig.savefig(out_path, bbox_inches='tight')
     plt.close(fig)
-    logger.info("Saved correlation heatmap to %s", out_path)
+    logger.info("Saved annotated correlation heatmap to %s", out_path)
     return out_path
-
 
 def plot_histogram_pm25(df: pd.DataFrame, output_dir: str, n_bins: int = 20) -> str:
     """
@@ -73,7 +95,7 @@ def plot_histogram_pm25(df: pd.DataFrame, output_dir: str, n_bins: int = 20) -> 
     # Compute daily average if datetime column exists
     if 'datetime' in df.columns:
         df = df.set_index(pd.to_datetime(df['datetime']))
-    daily = df['pm2.5'].resample('D').mean()
+    daily = df['PM2.5'].resample('D').mean()
     data = daily.dropna().values
 
     fig, ax = plt.subplots()

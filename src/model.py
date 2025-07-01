@@ -18,7 +18,7 @@ def choose_device() -> torch.device:
     return torch.device('cpu')
 
 
-class PMModel(nn.Module):
+class PM_Model(nn.Module):
     """
     A fully connected ffn model for regression of PM2.5
 

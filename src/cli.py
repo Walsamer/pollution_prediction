@@ -5,11 +5,11 @@ import logging
 import pandas as pd
 
 from src.preprocess import preprocess_data
-from src.eda import plot_pm25_trend, plot_correlation, plot_histogram_pm25
+from src.explaratory_data_analysis import plot_pm25_trend, plot_correlation, plot_histogram_pm25
 from src.dataloaders import get_data_loaders
 from src.model import choose_device, PM_Model
 from src.train import train_model
-from src.hparam_search import hyperparameter_search
+from src.hyperparameter_search import hyperparameter_search
 
 def setup_logging(level=logging.INFO):
     logging.basicConfig(

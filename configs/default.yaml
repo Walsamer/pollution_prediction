@@ -21,7 +21,7 @@ weight_decay: 0.0001
 early_stopping_patience: 5
 
 scheduler:
-  name: "RecudeLROnPlateau"
+  name: "ReduceLROnPlateau"
   factor: 0.5
   patience: 3
   min_lr: 1e-6

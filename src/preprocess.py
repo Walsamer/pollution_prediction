@@ -61,6 +61,8 @@ def preprocess_data(zip_path: str, station: str, output_csv: str) -> pd.DataFram
     # Drop wind direction if present (non-numerical data)
     if 'wd' in df_loaded.columns:
         df_loaded = df_loaded.drop('wd', axis=1)
+    if 'station' in df_loaded.columns:
+        df_loaded = df_loaded.drop('station', axis=1)
 
     # Drop rows(samples) with any missing values
     df_clean = df_loaded.dropna()

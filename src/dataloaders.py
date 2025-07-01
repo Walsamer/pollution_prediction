@@ -48,7 +48,7 @@ def get_data_loaders(
     df = df.copy()
 
     # Separate features and target
-    label_col = 'pm2.5'
+    label_col = 'PM2.5'
     if label_col not in df.columns:
         raise KeyError(f"Expected target column '{label_col}' in DataFrame")
     X = df.drop(columns=[label_col])
