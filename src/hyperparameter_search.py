@@ -10,7 +10,7 @@ from src.train import train_model
 logger = logging.getLogger(__name__)
 
 def hyperparameter_search(model_cls: Any, train_loader: torch.utils.data.DataLoader,
-    val_loader: torch.utils.data.DataLoader, device: torch.device, cfg: Dict[str, Any]
+    val_loader: torch.utils.data.DataLoader, device: torch.device, cfg: Dict[str, Any], input_dim: int
 ) -> Dict[str, Any]:
     """
     Perform grid or random hyperparameter search based on the provided configuration.
@@ -61,7 +61,7 @@ def hyperparameter_search(model_cls: Any, train_loader: torch.utils.data.DataLoa
 
         #Instantiating model
         model = model_cls(
-            input_dim=params.get('input_dim'),
+            input_dim=input_dim,
             hidden_size=params.get('hidden_size'),
             dropout=params.get('dropout')
         ).to(device)
@@ -79,6 +79,11 @@ def hyperparameter_search(model_cls: Any, train_loader: torch.utils.data.DataLoa
         )
 
         metric_val = history.get(metric_name)
+        if metric_val == 'val_loss':
+            metric_val = history['best_val_loss']
+        else:
+            raw = history.get(metric_name)
+            metric_val = raw[-1]
         results.append({**params, metric_name: metric_val})
 
         if metric_val < best_metric: #comparing models and keeping the best
@@ -98,6 +103,7 @@ def hyperparameter_search(model_cls: Any, train_loader: torch.utils.data.DataLoa
     plt.plot(range(1, len(results)+1), [r[metric_name] for r in results], marker='o')
     plt.xlabel('Trial')
     plt.ylabel(metric_name)
+    plt.xticks(range(1, len(results)+1))
     plt.title('Hyperparameter Search {}'.format(metric_name))
     plot_path = os.path.join(output_dir, 'hpo_results_plot.png')
     plt.savefig(plot_path, bbox_inches='tight')

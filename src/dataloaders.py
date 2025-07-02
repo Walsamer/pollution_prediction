@@ -52,7 +52,7 @@ def get_data_loaders(
     if label_col not in df.columns:
         raise KeyError(f"Expected target column '{label_col}' in DataFrame")
     X = df.drop(columns=[label_col])
-    #X = X.select_dtypes(include=[np.number])
+    X = X.select_dtypes(include=[np.number])
     y = df[label_col].values
 
     # 3way split: first test, then val from remaining

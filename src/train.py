@@ -60,11 +60,24 @@ def train_model(
     sch_cfg = cfg.get('scheduler')
     if sch_cfg:
         sched_cls = getattr(torch.optim.lr_scheduler, sch_cfg['name'])
-        params = {k: v for k, v in sch_cfg.items() if k != 'name'}
+        raw = {k: v for k, v in sch_cfg.items() if k != 'name'}
+        print(raw)
+        params = {}
+        for k, v in raw.items():
+            if k == 'patience':
+                params[k] = int(v)
+            elif k == 'factor' or k == 'min_lr':
+                params[k] = float(v)
+            else:
+                params[k] = v
+        
+        
+        
         scheduler = sched_cls(optimizer, **params)
 
+
     epochs = cfg['epochs']
-    patience = cfg['early_stopping_patience']
+    patience = int(cfg['early_stopping_patience'])
     ckpt_cfg = cfg.get('checkpoint', {})
 
     history = {'train_loss': [], 'val_loss': []}

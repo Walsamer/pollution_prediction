@@ -35,14 +35,14 @@ reports_dir: "reports/"
 
 checkpoint:
   save_best_only: true
-  save_everyn_epochs: 5
+  save_every_n_epochs: 5
 
 #===Hyperparameter Search===
 hyperparameter_search:
   enabled: true
   strategy: "grid"
   metric: "val_loss"
-  max_trials: 12
+  max_trials: 4
   param_grid:
     hidden_size:
       - [64, 32]

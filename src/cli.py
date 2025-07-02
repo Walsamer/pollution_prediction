@@ -124,6 +124,9 @@ def main():
             test_split=cfg.get("test_split", 0.1),
             random_seed=cfg.get("random_seed", 42)
         )
+        for xb, _ in train_loader:  
+            input_dim = xb.shape[1]
+            break
         device = choose_device()
         logger.info("Starting hyperparameter search on device: %s", device)
         results = hyperparameter_search(
@@ -131,7 +134,8 @@ def main():
             train_loader=train_loader,
             val_loader=val_loader,
             device=device,
-            cfg=cfg
+            cfg=cfg,
+            input_dim=input_dim
         )
         logger.info("Hyperparameter search complete. Best params: %s, Best metric: %.4f", results.get('best_params'), results.get('best_metric'))
 
