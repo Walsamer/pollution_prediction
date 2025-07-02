@@ -42,3 +42,14 @@ python src/predict.py \
   --input path/to/new_weather.csv \
   --output path/to/predictions.csv \
   --config configs/default.yaml
+
+## 4. Plots
+coming soon
+
+## 5. Next Steps
+
+- Interactive Dashboard: Build a Plotly Express or Dash dashboard to visualize real-time forecasts for stakeholders.
+
+- Model Tuning & Comparison: Optimize hyperparameters and compare Random Forest, XGBoost, and LSTM models using TimeSeriesSplit.
+
+- Deployment: Containerize the API with Docker and deploy via FastAPI, including CI/CD with GitHub Actions.
