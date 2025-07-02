@@ -43,8 +43,9 @@ python src/predict.py \
   --output path/to/predictions.csv \
   --config configs/default.yaml
 
-## 4. Plots
-coming soon
+##4. Configuration
+
+Model and pipeline parameters are managed via configs/default.yaml. Adjust paths, split ratios, and hyperparameters as needed.
 
 ## 5. Next Steps
 
