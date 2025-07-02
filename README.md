@@ -1,13 +1,13 @@
 # Pollution Prediction
 
-![Air Pollution](https://chatgpt.com/s/m_68651ea5dcd48191a396faa039bdd221)
+![Air Pollution](assets/air_pollution.png)
 
 ## 1. Project Motivation
 Forecasting air pollution levels is critical for public health initiatives, urban planning, and environmental policy enforcement. Understanding pollution trends enables:
 
 - **Health Alerts**: Issuing warnings for vulnerable groups (e.g., children, elderly) during high pollution periods.
 - **Policy Making**: Guiding emissions reduction strategies and evaluating regulatory impacts.
-- **Technical Demonstration**: Showcasing an end-to-end machine learning pipeline (data ingestion → feature engineering → modeling → deployment) on real-world open data, preparing you for professional ML roles.
+- **Technical Demonstration**: Showcasing an end-to-end machine learning pipeline (data ingestion → feature engineering → modeling → deployment) on real-world open data, preparing for professional ML roles.
 
 ## 2. Data
 We utilize the **Beijing Multi-Site Air Quality Data Set** from the UCI Machine Learning Repository:
