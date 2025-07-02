@@ -38,16 +38,31 @@ checkpoint:
   save_everyn_epochs: 5
 
 #===Hyperparameter Search===
-hyperparameter_search: 
+hyperparameter_search:
   enabled: true
   strategy: "grid"
-  metric: "val_loss" #which metric to optimize
+  metric: "val_loss"
+  max_trials: 12
   param_grid:
-    - [64, 32]
-    - [128, 64]
-    - [64, 32, 16]
-  dropout: [0.0, 0.2, 0.5]
-  learning_rate: [0.001, 0.0005, 0.0001]
-  batch_size: [32, 64, 128]
-  weight_decay: [0.0, 0.0001]
-early_stopping_patience: 3
+    hidden_size:
+      - [64, 32]
+      - [128, 64]
+      - [64, 32, 16]
+    dropout:
+      - 0.0
+      - 0.2
+      - 0.5
+    learning_rate:
+      - 0.001
+      - 0.0005
+      - 0.0001
+    batch_size:
+      - 32
+      - 64
+      - 128
+    weight_decay:
+      - 0.0
+      - 0.0001
+  early_stopping_patience: 3
+
+
